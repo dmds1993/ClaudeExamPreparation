@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Private Claude Certified Architect Foundations mock exam and weakness practice lab.">
+  <title>Claude Architect Practice Lab</title>
+  <link rel="stylesheet" href="styles.css?v=20260913c">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#exam" aria-label="Claude Architect Practice Lab home">
+        <span class="brand-mark" aria-hidden="true">CA</span>
+        <span><strong>Architect Practice Lab</strong><small>CCA Foundations · private study</small></span>
+      </a>
+      <nav class="view-tabs" aria-label="Primary views">
+        <button class="view-tab is-active" data-view="exam" aria-current="page">Mock exam</button>
+        <button class="view-tab" data-view="library">Practice sets</button>
+        <button class="view-tab" data-view="guide">Study guide</button>
+        <button class="view-tab" data-view="weakness">Weakness lab</button>
+      </nav>
+      <div class="top-actions">
+        <span class="save-state"><span aria-hidden="true"></span>Saved locally</span>
+        <button class="icon-button" id="themeButton" aria-label="Toggle color theme">☼</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="examView" class="view is-active" aria-labelledby="examTitle">
+        <div class="exam-layout">
+          <aside class="exam-rail">
+            <div class="rail-heading">
+              <p class="eyebrow" id="modeLabel">Full simulation</p>
+              <h1 id="examTitle">Mock exam</h1>
+              <p id="examMeta">60 questions · 120 minutes</p>
+            </div>
+            <div class="timer-card" aria-live="polite">
+              <span>Time remaining</span>
+              <strong id="timer">02:00:00</strong>
+              <div class="timer-track"><span id="timerProgress"></span></div>
+            </div>
+            <div class="question-legend" aria-label="Question status legend">
+              <span><i class="answered"></i>Answered</span>
+              <span><i class="review"></i>Review</span>
+              <span><i></i>Open</span>
+            </div>
+            <div id="questionGrid" class="question-grid" aria-label="Question navigator"></div>
+            <button class="secondary-button full-width" id="pauseButton">Pause exam</button>
+          </aside>
+
+          <div class="exam-workspace">
+            <div class="workspace-status">
+              <div>
+                <span id="questionCounter">Question 1 of 3</span>
+                <strong id="domainLabel">Context Management & Reliability</strong>
+              </div>
+              <div class="status-metrics">
+                <span><strong id="answeredCount">0</strong> answered</span>
+                <span><strong id="reviewCount">0</strong> flagged</span>
+              </div>
+            </div>
+
+            <article class="question-card">
+              <div class="question-head">
+                <div class="question-identity"><span class="question-number" id="questionNumber">01</span><span class="source-badge" id="sourceBadge">Coach-reviewed</span></div>
+                <button class="review-button" id="reviewButton" aria-pressed="false">☆ Mark for review</button>
+              </div>
+              <h2 id="questionStem"></h2>
+              <p class="selection-note" id="selectionNote">Select one answer.</p>
+              <form id="answersForm" class="answer-list"></form>
+              <div class="confidence-row">
+                <span>Confidence</span>
+                <div id="confidenceButtons" class="confidence-buttons" role="group" aria-label="Confidence from one to five"></div>
+                <small>1 = guess · 5 = certain</small>
+              </div>
+            </article>
+
+            <div class="exam-controls">
+              <button class="secondary-button" id="backButton">← Back</button>
+              <button class="text-button" id="clearButton">Clear answer</button>
+              <button class="primary-button" id="nextButton">Next question →</button>
+            </div>
+          </div>
+        </div>
+        <section id="resultsPanel" class="results-panel" hidden aria-labelledby="resultsTitle">
+          <div class="results-hero">
+            <div>
+              <p class="eyebrow" id="resultsMode">Full simulation complete</p>
+              <h1 id="resultsTitle">Your practice result</h1>
+              <p id="resultsSubhead">Linear 0–1000 practice scale · 720 practice pass line.</p>
+            </div>
+            <div class="result-ring" id="resultRing"><strong id="resultScore">0</strong><span id="resultRingLabel">/ 1000</span></div>
+          </div>
+          <div class="result-metrics" id="resultMetrics"></div>
+          <div class="results-grid">
+            <section class="breakdown-panel">
+              <div class="panel-title"><div><p class="eyebrow">Domain view</p><h2>Where the score moved</h2></div></div>
+              <div id="domainBreakdown" class="domain-breakdown"></div>
+            </section>
+            <aside class="next-step-panel">
+              <p class="eyebrow">Recommended next step</p>
+              <h2 id="nextStepTitle">Repair the weakest decision boundary</h2>
+              <p id="nextStepText"></p>
+              <button class="primary-button full-width" id="resultDrillButton">Practice this weakness</button>
+              <button class="secondary-button full-width" id="exportAttemptButton">Export saved answers</button>
+              <button class="secondary-button full-width" id="newExamButton">Start a fresh full exam</button>
+              <button class="text-button full-width" id="returnWeaknessButton">Open Weakness Lab</button>
+            </aside>
+          </div>
+          <section class="review-panel">
+            <div class="panel-title"><div><p class="eyebrow">Answer review</p><h2>Topic → why → reason → example</h2></div><button class="secondary-button" id="incorrectOnlyButton" aria-pressed="true">Incorrect only</button></div>
+            <div id="reviewList" class="review-list"></div>
+          </section>
+        </section>
+      </section>
+
+      <section id="libraryView" class="view" aria-labelledby="libraryTitle">
+        <div class="library-header">
+          <div>
+            <p class="eyebrow">Purchased course library · local only</p>
+            <h1 id="libraryTitle">All six practice sets</h1>
+            <p>Run any original set with its complete question order, timer, flags, confidence, and autosave.</p>
+          </div>
+          <div class="library-total"><strong>395</strong><span>questions imported</span></div>
+        </div>
+        <div class="source-notice" role="note">
+          <strong>Two-layer practice</strong>
+          <span>The 60-question certification simulation has coach-reviewed keys. Bonus Set 1 uses your completed Udemy result; Bonus Set 2 has a reviewed 70-answer key and reports a 0–1000 practice score. The other four imported sets remain completion-based.</span>
+        </div>
+        <div id="setCards" class="set-grid"></div>
+      </section>
+
+      <section id="guideView" class="view" aria-labelledby="guideTitle">
+        <div class="guide-hero">
+          <div>
+            <p class="eyebrow">Final review · 843 of 1000</p>
+            <h1 id="guideTitle">One-hour exam study guide</h1>
+            <p>Read the high-yield rules for 35 minutes, complete two targeted drills for 20 minutes, then scan the recognition sheet for 5 minutes.</p>
+          </div>
+          <div class="guide-score"><strong>60</strong><span>minutes</span></div>
+        </div>
+
+        <div class="guide-shell">
+          <nav class="guide-toc" aria-label="Study guide contents">
+            <p class="eyebrow">Reading order</p>
+            <a href="#guide-plan">One-hour plan</a>
+            <a href="#guide-language">Decision language</a>
+            <a href="#guide-code">Claude Code</a>
+            <a href="#guide-tools">Tools and hooks</a>
+            <a href="#guide-batches">Batch API</a>
+            <a href="#guide-output">Output and retrieval</a>
+            <a href="#guide-agents">Agents and SDKs</a>
+            <a href="#guide-flags">Outdated items</a>
+            <a href="#guide-final">Final recognition sheet</a>
+          </nav>
+
+          <article class="guide-content">
+            <section id="guide-plan" class="guide-section">
+              <p class="eyebrow">Start here</p>
+              <h2>Your one-hour plan</h2>
+              <div class="time-grid">
+                <div><strong>0–10</strong><span>Decision rules and context commands</span></div>
+                <div><strong>10–25</strong><span>Tools, permissions, SDKs, and Batch API</span></div>
+                <div><strong>25–35</strong><span>Structured output, retrieval, caching, retries</span></div>
+                <div><strong>35–55</strong><span>Two targeted 10-question drills</span></div>
+                <div><strong>55–60</strong><span>Final recognition scan</span></div>
+              </div>
+              <p><strong>Priority:</strong> Agentic Architecture and Orchestration was your lowest domain at 75%. Context Management and Reliability was your strongest at 100%.</p>
+            </section>
+
+            <section id="guide-language" class="guide-section">
+              <p class="eyebrow">Exam vocabulary</p>
+              <h2>Translate question wording into architecture</h2>
+              <div class="guide-matrix">
+                <div class="matrix-head"><span>Wording</span><span>Meaning</span><span>Likely answer</span></div>
+                <div><strong>Must, guarantee, enforce</strong><span>Model discretion is insufficient</span><span>Backend gate, permission, hook, schema, or explicit invocation</span></div>
+                <div><strong>Most token efficient</strong><span>Remove unnecessary model work</span><span>Project or normalize before context; script mechanical edits</span></div>
+                <div><strong>Best immediate fix</strong><span>Follow the stated failure signal</span><span><code>max_tokens</code> means more output capacity or smaller output</span></div>
+                <div><strong>High recall</strong><span>Reduce false negatives</span><span>Overlapping chunks and minimum sampling per stratum</span></div>
+                <div><strong>Correlate batch results</strong><span>Order is unreliable</span><span><code>custom_id</code></span></div>
+                <div><strong>Independent review</strong><span>Avoid anchoring</span><span>Fresh reviewer context plus task, rubric, artifact, evidence</span></div>
+              </div>
+              <p><strong>Core rule:</strong> put each requirement at the lowest layer that can enforce it reliably. Prompts guide; code, permissions, schemas, hooks, and backends enforce.</p>
+            </section>
+
+            <section id="guide-code" class="guide-section">
+              <p class="eyebrow">Claude Code</p>
+              <h2>Clear compact fork and project rules</h2>
+              <ul>
+                <li><strong><code>/compact instructions</code></strong> continues the same task with a generated summary. Preserve goals, modified files, decisions, and tests.</li>
+                <li><strong><code>/clear</code></strong> starts a new conversation with empty context. Files already changed on disk remain unchanged.</li>
+                <li><strong>Branch or fork</strong> copies an earlier starting context, so it is not complete isolation.</li>
+                <li><strong>Ephemeral CI container</strong> provides reliable runtime isolation between automated jobs.</li>
+                <li><strong>Root <code>CLAUDE.md</code></strong> carries recurring project guidance. A hook plus CI is stronger when literal enforcement is required.</li>
+                <li><strong>Large migration:</strong> PLAN → EXECUTE → TEST. Plan mode is a phase, not the finished task.</li>
+                <li><strong>Bulk mechanical change:</strong> generate and run a deterministic script, then inspect the diff and tests.</li>
+              </ul>
+              <pre>.claude/settings.json
+{
+  "permissions": {
+    "deny": ["Read(./.env.production)", "Read(./.env.*)"]
+  }
+}</pre>
+              <p>A Read deny rule protects built-in file tools. Add sandbox filesystem restrictions when Bash subprocesses also need OS-level protection.</p>
+            </section>
+
+            <section id="guide-tools" class="guide-section">
+              <p class="eyebrow">Tools and controls</p>
+              <h2>Know where enforcement belongs</h2>
+              <div class="guide-matrix compact">
+                <div class="matrix-head"><span>Layer</span><span>Purpose</span><span>Example</span></div>
+                <div><strong>Prompt or CLAUDE.md</strong><span>Guide behavior</span><span>Prefer Tailwind; describe escalation cases</span></div>
+                <div><strong>Routing classifier</strong><span>Protect expensive context</span><span>Filter weather questions before support agent</span></div>
+                <div><strong>PreToolUse</strong><span>Block or ask before execution</span><span>Refund amount or security policy check</span></div>
+                <div><strong>Tool backend</strong><span>Enforce every caller</span><span>Require a valid identity session token</span></div>
+                <div><strong>PostToolUse</strong><span>Validate or replace completed output</span><span>Format, lint, test, or return <code>updatedToolOutput</code></span></div>
+                <div><strong>CI validator</strong><span>Independent evidence</span><span>Tests, schema validation, policy audit</span></div>
+              </div>
+              <p><strong><code>tool_choice: any</code></strong> forces at least one tool, not a specific tool and not a prerequisite order. It cannot replace an identity gate.</p>
+              <p><strong>Tool contract:</strong> distinctive name, when to use, when not to use, exact inputs, output shape, limits, and neighboring alternatives. Project unused fields and normalize backend formats before the model sees them.</p>
+            </section>
+
+            <section id="guide-batches" class="guide-section">
+              <p class="eyebrow">Message Batches API</p>
+              <h2>Batch ID tracks the job custom ID tracks the request</h2>
+              <pre>POST /v1/messages/batches
+{
+  "requests": [{
+    "custom_id": "document-0042",
+    "params": {
+      "model": "&lt;current-model-id&gt;",
+      "max_tokens": 1200,
+      "messages": [{"role": "user", "content": "Extract ..."}]
+    }
+  }]
+}</pre>
+              <ol>
+                <li>Assign a unique <code>custom_id</code> that maps to the source record.</li>
+                <li>Store the returned batch ID and poll overall processing status.</li>
+                <li>Retrieve results and map every entry by <code>custom_id</code>; result order is not submission order.</li>
+                <li>Inspect each result type and error. Chunk only context-limit failures.</li>
+                <li>Resubmit with traceable IDs such as <code>document-0042-part-01</code>.</li>
+              </ol>
+              <p><strong>Boundary:</strong> Message Batches improves asynchronous throughput and price. It does not enlarge one request’s context or improve retrieval recall. Use parallel tool calls when the current live response needs several independent results.</p>
+            </section>
+
+            <section id="guide-output" class="guide-section">
+              <p class="eyebrow">Structured output and retrieval</p>
+              <h2>Match the symptom to the repair</h2>
+              <ul>
+                <li><strong>ISO calendar date:</strong> use JSON Schema <code>{"type":"string","format":"date"}</code>.</li>
+                <li><strong>Optional:</strong> field may be absent. <strong>Nullable:</strong> field exists but no confident value is available.</li>
+                <li><strong>Cut-off JSON with <code>stop_reason: max_tokens</code>:</strong> increase output capacity or reduce and chunk the requested output.</li>
+                <li><strong>Correct value in the wrong object:</strong> error-feedback retry can repair the transformation.</li>
+                <li><strong>Fact absent from the source:</strong> retry cannot invent evidence; return null or absent, obtain another source, or escalate.</li>
+                <li><strong>Long-document recall:</strong> split into overlapping windows so boundary evidence survives.</li>
+                <li><strong>Rare document types:</strong> guarantee a minimum sample per type, then allocate remaining samples by volume or risk.</li>
+                <li><strong>Prompt caching:</strong> cache a stable prefix. The write has a premium, later reads are cheaper, and output pricing is unchanged.</li>
+              </ul>
+            </section>
+
+            <section id="guide-agents" class="guide-section">
+              <p class="eyebrow">Agents and SDKs</p>
+              <h2>Fresh review coordinated flow and current SDK behavior</h2>
+              <ul>
+                <li><strong>Independent reviewer:</strong> fresh context with original task, rubric, final artifact, and necessary evidence. Exclude the researcher’s confidence and persuasive reasoning.</li>
+                <li><strong>Hub and spoke:</strong> subagents return results to the coordinator, which owns dependencies and routes evidence.</li>
+                <li><strong>Terminal state:</strong> a stopped loop is not necessarily resolved. End as completed, failed, or handoff-ready with a clear owner and preserved state.</li>
+                <li><strong>Client SDK Tool Runner:</strong> can automate custom tool calls, tool results, and loop management.</li>
+                <li><strong>Claude Agent SDK:</strong> adds the Claude Code runtime and built-in tools such as Read and Bash, plus sessions, hooks, permissions, and subagents.</li>
+                <li><strong>Agent SDK subagent:</strong> explicitly naming a configured agent is documented as guaranteed invocation.</li>
+                <li><strong>Interactive Claude Code subagent:</strong> natural-language naming influences delegation; an <code>@</code>-mention guarantees the chosen agent for one task.</li>
+              </ul>
+            </section>
+
+            <section id="guide-flags" class="guide-section">
+              <p class="eyebrow">Course corrections</p>
+              <h2>Do not memorize these outdated answers</h2>
+              <div class="flag-list">
+                <p><strong><code>.claudeignore</code></strong><span>Current answer: <code>permissions.deny</code> in <code>.claude/settings.json</code>, plus sandboxing when Bash must also be constrained.</span></p>
+                <p><strong>PostToolUse regex for ISO dates</strong><span>Current Structured Outputs support JSON Schema <code>format: date</code>. Application validation can still add defense in depth.</span></p>
+                <p><strong>Client SDK always needs a handwritten loop</strong><span>Outdated because current Client SDK Tool Runner automates the lifecycle.</span></p>
+                <p><strong>Named subagent has one universal rule</strong><span>Agent SDK and interactive Claude Code use different documented guarantees.</span></p>
+                <p><strong>Always use <code>/clear</code> in long sessions</strong><span>Use <code>/compact</code> to continue the same task; reserve <code>/clear</code> for a new task or polluted context.</span></p>
+              </div>
+            </section>
+
+            <section id="guide-final" class="guide-section final-sheet">
+              <p class="eyebrow">Five-minute scan</p>
+              <h2>Final recognition sheet</h2>
+              <ol>
+                <li>Guarantee means a programmatic mechanism, not stronger wording.</li>
+                <li>Compact continues; clear starts a new conversation; neither reverts disk changes.</li>
+                <li><code>tool_choice: any</code> means some tool, not the correct tool or order.</li>
+                <li>PreToolUse runs before; PostToolUse runs after.</li>
+                <li>Business invariants belong in the backend.</li>
+                <li>Batch ID tracks the job; <code>custom_id</code> tracks each request.</li>
+                <li>Batching improves throughput, not context capacity or recall.</li>
+                <li>High recall needs overlapping chunks and minimum sampling floors.</li>
+                <li><code>max_tokens</code> truncation requires more capacity or smaller output.</li>
+                <li>Retry can fix placement; it cannot create missing evidence.</li>
+                <li>Cache stable prefixes; output tokens retain normal pricing.</li>
+                <li>Project and normalize tool output before model context.</li>
+                <li>Fresh reviewer context reduces anchoring.</li>
+                <li>Client Tool Runner and Agent SDK are different abstraction levels.</li>
+                <li>Plan, then execute and test.</li>
+              </ol>
+              <div class="guide-actions">
+                <button class="primary-button" data-guide-weakness="today-product">Practice Current Claude controls and SDKs</button>
+                <button class="secondary-button" data-guide-weakness="today-output">Practice Output contracts and repair</button>
+              </div>
+            </section>
+          </article>
+        </div>
+      </section>
+
+      <section id="weaknessView" class="view" aria-labelledby="weaknessTitle">
+        <div class="weakness-header">
+          <div>
+            <p class="eyebrow">Udemy Bonus Set 2 · Today’s result</p>
+            <h1 id="weaknessTitle">One-hour weakness lab</h1>
+            <p>Focused practice from your 11 missed or skipped decisions. Outdated and ambiguous course items are replaced with current-documentation versions.</p>
+          </div>
+          <div class="score-gap" aria-label="Practice score">
+            <span>Practice score</span><strong>843</strong><small>of 1000 · pass</small>
+          </div>
+        </div>
+        <div class="result-metrics tomorrow-summary" aria-label="Latest practice result summary">
+          <div class="metric-card"><span>Correct</span><strong>59</strong></div>
+          <div class="metric-card"><span>Incorrect</span><strong>7</strong></div>
+          <div class="metric-card"><span>Skipped</span><strong>4</strong></div>
+          <div class="metric-card"><span>Practice</span><strong>60 min</strong></div>
+        </div>
+        <div class="weakness-layout">
+          <div class="priority-panel">
+            <div class="panel-title"><div><p class="eyebrow">15 targeted questions</p><h2>What to practice now</h2></div><span>From your feedback</span></div>
+            <div id="weaknessCards" class="weakness-cards"></div>
+          </div>
+          <aside class="study-panel">
+            <p class="eyebrow">Selected lesson</p>
+            <h2 id="studyTitle">Enforced controls</h2>
+            <div class="concept-flow" aria-label="Guidance versus enforcement diagram">
+              <span>Guidance</span><b>→</b><span>Boundary</span><b>→</b><span>Evidence</span>
+            </div>
+            <div class="lesson-block"><span>Topic</span><p id="lessonTopic"></p></div>
+            <div class="lesson-block"><span>Why</span><p id="lessonWhy"></p></div>
+            <div class="lesson-block"><span>Reason</span><p id="lessonReason"></p></div>
+            <div class="lesson-block example"><span>Example</span><pre id="lessonExample"></pre></div>
+            <p class="lab-mix" id="labMix"><strong>Today: 10-question current-doc repair drill</strong></p>
+            <button class="primary-button full-width" id="startDrillButton">Start today’s repair drill</button>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+  <dialog id="finishDialog" class="modal">
+    <form method="dialog">
+      <p class="eyebrow">Finish attempt</p>
+      <h2>Submit your answers?</h2>
+      <p id="finishSummary">You can still return to unanswered or flagged questions.</p>
+      <div class="modal-actions"><button class="secondary-button" value="cancel">Keep reviewing</button><button class="primary-button" value="submit" id="confirmFinishButton">Submit exam</button></div>
+    </form>
+  </dialog>
+  <dialog id="pauseDialog" class="modal pause-modal">
+    <form method="dialog">
+      <p class="eyebrow">Attempt paused</p>
+      <h2>Your timer is stopped.</h2>
+      <p>Your answers and current question are saved on this device.</p>
+      <button class="primary-button full-width" value="resume" id="resumeButton">Resume attempt</button>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="questions.js"></script>
+  <script src="practice-sets.js"></script>
+  <script src="app.js?v=20260913f"></script>
+</body>
+</html>
